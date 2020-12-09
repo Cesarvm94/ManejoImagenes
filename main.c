@@ -18,24 +18,24 @@ typedef unsigned char byte;
  
 void ReadImage(const char *fileName,byte **pixels, int32 *width, int32 *height, int32 *bytesPerPixel)
 {
-		//En este primer bloque vamos a sacar informaciÛn del header
+		//En este primer bloque vamos a sacar informaci√≥n del header
 		//Abro el archivo en modo rb (lectura de binarios)
 		FILE *imageFile = fopen(fileName, "rb"); 
         int32 dataOffset;
-        /*Permite hacer un salto a una posiciÛn especifica del fichero, es decir, desplaza la posiciÛn actual de lectura del fichero, el orden de los parametros recibidos ser·n:
-        el indentificador del archivo, es decir, el puntero definido para la apertura del archivo, luego el desplazamiento y finalmente la posiciÛn de origen, en este caso, iniciaremos desde
+        /*Permite hacer un salto a una posici√≥n especifica del fichero, es decir, desplaza la posici√≥n actual de lectura del fichero, el orden de los parametros recibidos ser√°n:
+        el indentificador del archivo, es decir, el puntero definido para la apertura del archivo, luego el desplazamiento y finalmente la posici√≥n de origen, en este caso, iniciaremos desde
         la primer posicion del archivo (comienzo de dicho archivo) esto lo hago con SEEK_SET que es una "palabra" reservada que define la posicion del puntero donde inicia dicho archivo
         */
-        /*Se corre a DATA_OFFSET_OFFSET--->0x000A, es decir 10 en decimal, porque en dicha posiciÛn es donde empiezan los datos de pixeles del archivo.... 
+        /*Se corre a DATA_OFFSET_OFFSET--->0x000A, es decir 10 en decimal, porque en dicha posici√≥n es donde empiezan los datos de pixeles del archivo.... 
         */
         fseek(imageFile, DATA_OFFSET_OFFSET, SEEK_SET);
         /*
-        Permite definir unos parametros de lectura, para ello usamos primero un puntero que me va a permitir definir un espacio para guardar lo leÌdo, luego el tamaÒo de lo leido en bytes,
-        posteriormente el numero de items a ser leidos, finalmente el puntero que me dice donde est· el archivo a leer. Me va a devolver en la variable dataoffset el numero de elementos leidos
+        Permite definir unos parametros de lectura, para ello usamos primero un puntero que me va a permitir definir un espacio para guardar lo le√≠do, luego el tama√±o de lo leido en bytes,
+        posteriormente el numero de items a ser leidos, finalmente el puntero que me dice donde est√° el archivo a leer. Me va a devolver en la variable dataoffset el numero de elementos leidos
         */
         fread(&dataOffset, 4, 1, imageFile);
         /*
-        Actualizo mi posicion a la posicion donde esta ubicada la informaciÛn del ancho de la imagen en pixeles       
+        Actualizo mi posicion a la posicion donde esta ubicada la informaci√≥n del ancho de la imagen en pixeles       
         */
         fseek(imageFile, WIDTH_OFFSET, SEEK_SET);
         /*
@@ -45,7 +45,7 @@ void ReadImage(const char *fileName,byte **pixels, int32 *width, int32 *height, 
         
         
         /*
-        Actualizo mi posicion a la posicion donde esta ubicada la informaciÛn de la altura de la imagen en pixeles       
+        Actualizo mi posicion a la posicion donde esta ubicada la informaci√≥n de la altura de la imagen en pixeles       
         */
         fseek(imageFile, HEIGHT_OFFSET, SEEK_SET);
         /*
@@ -55,29 +55,29 @@ void ReadImage(const char *fileName,byte **pixels, int32 *width, int32 *height, 
         
         int16 bitsPerPixel;
         /*
-        Actualizo mi posicion a la posicion donde esta ubicada la informaciÛn del numero de bits por pixel    
+        Actualizo mi posicion a la posicion donde esta ubicada la informaci√≥n del numero de bits por pixel    
         */
         fseek(imageFile, BITS_PER_PIXEL_OFFSET, SEEK_SET);
         /*
-        Leo la informacion contenida en la direccion previamente asignada con fseek, esta vez hago deferenciacion a la variable creada "bitsPerPixel" y hago una lectura de un elemento de tamaÒo
-        de 2 bytes, dicho tamaÒo est· determinado en la documentaciÛn
+        Leo la informacion contenida en la direccion previamente asignada con fseek, esta vez hago deferenciacion a la variable creada "bitsPerPixel" y hago una lectura de un elemento de tama√±o
+        de 2 bytes, dicho tama√±o est√° determinado en la documentaci√≥n
         */
         fread(&bitsPerPixel, 2, 1, imageFile);
         /*
-        El dato recuperado est· expresado en bits, lo transformo en bytes y lo asigno a la variable "bytesPerPixel" apuntada por dicho puntero.
+        El dato recuperado est√° expresado en bits, lo transformo en bytes y lo asigno a la variable "bytesPerPixel" apuntada por dicho puntero.
         */
         *bytesPerPixel = ((int32)bitsPerPixel) / 8;
         int m=*bytesPerPixel;
         
- 		//Fin de informaciÛn del header
+ 		//Fin de informaci√≥n del header
  		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 		//Ceil aproxima al entero mayor m·s cercano 
+ 		//Ceil aproxima al entero mayor m√°s cercano 
  		/*
  		Calculo ajustado de bytes en una fila, asegurarme que cada 4 pixeles voy a tener una distribucion uniforme de bytes, es decir, hacer su longitud multiplo de 4
  		*/
-        int paddedRowSize = (int)(4 * ceil((float)(*width) / 4.0f))*(*bytesPerPixel);         
-        //Ceil aproxima al entero mayor m·s cercano 
+        //int paddedRowSize = (int)(4 * ceil((float)(*width) / 4.0f))*(*bytesPerPixel);         
+        //Ceil aproxima al entero mayor m√°s cercano 
  		/*
  		Calculo de bytes en una fila (numero de elementos (pixeles) en fila x bytes por pixel)
  		*/        
@@ -87,12 +87,12 @@ void ReadImage(const char *fileName,byte **pixels, int32 *width, int32 *height, 
 		*/
         int totalSize = unpaddedRowSize*(*height);
         /*
-        Arreglo de pixeles con el tamaÒo de bytes de la imagen completa
+        Arreglo de pixeles con el tama√±o de bytes de la imagen completa
         */
         *pixels = (byte*)malloc(totalSize);
         /*
-        Puntero que va a apuntar a la ultima fila del arreglo de pixeles, esto lo hace con sumandole a la variable inicial el tamaÒo de la altura -1 * el numero de filas...  
-        øLe resta 1 porque el indice empieza en 0?
+        Puntero que va a apuntar a la ultima fila del arreglo de pixeles, esto lo hace con sumandole a la variable inicial el tama√±o de la altura -1 * el numero de filas...  
+        ¬øLe resta 1 porque el indice empieza en 0?
         */
         
         int i=0;
@@ -104,19 +104,19 @@ void ReadImage(const char *fileName,byte **pixels, int32 *width, int32 *height, 
         	/*
         	Identificador del archivo, desplazamiento, comienzo en el inicio del archivo
         	
-        	El desplazamiento se har· cogiendo el dataOffSet para omitir el header innecesario y a ello le sumo el producto del elemento iterador por el ancho en bytes de una fila
-        	Se asume que se coge el tamaÒo ajustado para asegurarse que no queda ningun byte sobrando en la fila cometiendo errores en los saltos
+        	El desplazamiento se har√° cogiendo el dataOffSet para omitir el header innecesario y a ello le sumo el producto del elemento iterador por el ancho en bytes de una fila
+        	Se asume que se coge el tama√±o ajustado para asegurarse que no queda ningun byte sobrando en la fila cometiendo errores en los saltos
         	Es decir, que en cada desplazamiento voy a cubrir una fila, haciendo una lectura fila a fila.
         	*/
         	
-            fseek(imageFile, dataOffset+(i*paddedRowSize), SEEK_SET);
+            fseek(imageFile, dataOffset+(i*unpaddedRowSize), SEEK_SET);
             /*
-            Realizo la lectura de abajo hacia arriba ya que currentRowPointer fue apuntado al final del archivo, harÈ una lectura de byte por byte y tomarÈ tantos bytes
+            Realizo la lectura de abajo hacia arriba ya que currentRowPointer fue apuntado al final del archivo, har√© una lectura de byte por byte y tomar√© tantos bytes
             como elementos no ajustados tiene la fila, todo ello del archivo "imageFile"
             */
             fread(currentRowPointer, 1, unpaddedRowSize, imageFile); 
             /*
-            El decremento se lleva a cabo ac·, donde empiezo en el final del archivo y empiezo a ir de adelante hacia atr·s.
+            El decremento se lleva a cabo ac√°, donde empiezo en el final del archivo y empiezo a ir de adelante hacia atr√°s.
             */
             currentRowPointer -= unpaddedRowSize;
             //currentRowPointer -= 3;
@@ -138,7 +138,7 @@ void WriteImage(const char *fileName, byte *pixels, int32 width, int32 height,in
         fwrite(&BM[0], 1, 1, outputFile);
         fwrite(&BM[1], 1, 1, outputFile);
         int paddedRowSize = (int)(4 * ceil((float)width/4.0f))*bytesPerPixel;
-        //TamaÒo del archivo usado en el header
+        //Tama√±o del archivo usado en el header
         int32 fileSize = paddedRowSize*height + HEADER_SIZE + INFO_HEADER_SIZE;
         fwrite(&fileSize, 4, 1, outputFile);
         int32 reserved = 0x0000;
@@ -181,37 +181,80 @@ void WriteImage(const char *fileName, byte *pixels, int32 width, int32 height,in
 			}
         	
 		}*/
+		
         int i = 0;
         int unpaddedRowSize = width*bytesPerPixel;
-        printf("%d",bytesPerPixel);
-        int kernel[3][3]= { { -1, -1, -1 }, { -1, 8, -1 }, {-1,-1,-1} }; //Se establece el kernel
+        //printf("%d",bytesPerPixel);
+        //int kernel[3][3]= { { -1, -1, -1 }, { -1, 8, -1 }, {-1,-1,-1} }; //Se establece el kernel
         //Se intenta recorrer pixels posicion a posicion para que haga las operaciones con el kernel
-        for (i= 1; i < height - 1 ; i++){
+        
+		/*
+		for (i= 1; i < height - 1 ; i++){
         	int pixelOffset=((height-i)-1)*unpaddedRowSize; //Posicion de primer byte de ultima fila, el ciclo la lleva hasta primer fila
             pixels[pixelOffset]= ((pixels[pixelOffset-(unpaddedRowSize+1)]*kernel[0][0]) + (pixels[pixelOffset-unpaddedRowSize]*kernel[0][1]) +  (pixels[pixelOffset-(unpaddedRowSize-1)]*kernel[0][2]) 
 			+  (pixels[pixelOffset-1]*kernel[1][0]) + (pixels[pixelOffset]*kernel[1][1]) + (pixels[pixelOffset+1]*kernel[1][2]) + (pixels[pixelOffset+(unpaddedRowSize-1)]*kernel[2][0])+
 			(pixels[pixelOffset-unpaddedRowSize]*kernel[2][1]) + (pixels[pixelOffset-(unpaddedRowSize+1)]*kernel[2][2]) );
-        	for (j=1;j<unpaddedRowSize;j++){  //Recorro la fila correspondiente
+        	for (j=1;j<unpaddedRowSize-1;j++){  //Recorro la fila correspondiente
             	pixels[pixelOffset+j]=((pixels[pixelOffset+j-(unpaddedRowSize+1)]*kernel[0][0]) + (pixels[pixelOffset+j-unpaddedRowSize]*kernel[0][1]) +  (pixels[pixelOffset+j-(unpaddedRowSize-1)]*kernel[0][2]) 
 			+  (pixels[pixelOffset+j-1]*kernel[1][0]) + (pixels[pixelOffset+j]*kernel[1][1]) + (pixels[pixelOffset+j+1]*kernel[1][2]) + (pixels[pixelOffset+j+(unpaddedRowSize-1)]*kernel[2][0])+
 			(pixels[pixelOffset+j+unpaddedRowSize]*kernel[2][1]) + (pixels[pixelOffset+j+(unpaddedRowSize+1)]*kernel[2][2]) ); //Escribo byte a byte, elemento a elemento de toda la fila
 			}
 		}
-        
-        
-        
+        */
         for ( i = 0; i < height ; i++)
         {
             int pixelOffset=((height-i)-1)*unpaddedRowSize; //Posicion de primer byte de ultima fila, el ciclo la lleva hasta primer fila
             fwrite(&pixels[pixelOffset], 1, 1, outputFile);
-			//printf("%d",pixels[100]);
-			//Escribo ese dato en esa posicion
+			
             for (j=1;j<width*bytesPerPixel;j++){  //Recorro la fila correspondiente
             	fwrite(&pixels[pixelOffset+j], 1, 1, outputFile); //Escribo byte a byte, elemento a elemento de toda la fila
 			}
         }
-        //Si tengo un chorizo de datos, pues buscar un patrÛn que describa la convoluciÛn, cada posiciÛn se va a desplazar
-        //la misma cantidad de bytes para buscar los elementos de la convoluciÛn
+        /*j=0;
+        FILE *fp;
+        FILE *fp1;
+        fp = fopen("archivo.txt", "w+");
+        for ( i = 0; i < height ; i++)
+        {
+            int pixelOffset=((height-i)-1)*unpaddedRowSize;
+            //printf("%d\n",i);
+			//printf("%d",pixels[100]);
+			//Escribo ese dato en esa posicion
+			fprintf(fp,"%d",pixels[pixelOffset]);
+            for (j=1;j<(width*bytesPerPixel);j++){
+            	fprintf(fp," %d ",pixels[pixelOffset+j]);
+			}
+			fprintf(fp,"\n");	
+        }
+        fclose(fp);
+        
+        for (i= 1; i < height - 1 ; i++){
+        	int pixelOffset=((height-i)-1)*unpaddedRowSize; //Posicion de primer byte de ultima fila, el ciclo la lleva hasta primer fila
+            pixels[pixelOffset]= ((pixels[pixelOffset-(unpaddedRowSize+1)]*kernel[0][0]) + (pixels[pixelOffset-unpaddedRowSize]*kernel[0][1]) +  (pixels[pixelOffset-(unpaddedRowSize-1)]*kernel[0][2]) 
+			+  (pixels[pixelOffset-1]*kernel[1][0]) + (pixels[pixelOffset]*kernel[1][1]) + (pixels[pixelOffset+1]*kernel[1][2]) + (pixels[pixelOffset+(unpaddedRowSize-1)]*kernel[2][0])+
+			(pixels[pixelOffset-unpaddedRowSize]*kernel[2][1]) + (pixels[pixelOffset-(unpaddedRowSize+1)]*kernel[2][2]) );
+        	for (j=1;j<unpaddedRowSize-1;j++){  //Recorro la fila correspondiente
+            	pixels[pixelOffset+j]=((pixels[pixelOffset+j-(unpaddedRowSize+1)]*kernel[0][0]) + (pixels[pixelOffset+j-unpaddedRowSize]*kernel[0][1]) +  (pixels[pixelOffset+j-(unpaddedRowSize-1)]*kernel[0][2]) 
+			+  (pixels[pixelOffset+j-1]*kernel[1][0]) + (pixels[pixelOffset+j]*kernel[1][1]) + (pixels[pixelOffset+j+1]*kernel[1][2]) + (pixels[pixelOffset+j+(unpaddedRowSize-1)]*kernel[2][0])+
+			(pixels[pixelOffset+j+unpaddedRowSize]*kernel[2][1]) + (pixels[pixelOffset+j+(unpaddedRowSize+1)]*kernel[2][2]) ); //Escribo byte a byte, elemento a elemento de toda la fila
+			}
+		}
+		fp1 = fopen("archivo1.txt", "w+");
+        for ( i = 0; i < height ; i++)
+        {
+            int pixelOffset=((height-i)-1)*unpaddedRowSize;
+            //printf("%d\n",i);
+			//printf("%d",pixels[100]);
+			//Escribo ese dato en esa posicion
+			fprintf(fp,"%d",pixels[pixelOffset]);
+            for (j=1;j<(width*bytesPerPixel);j++){
+            	fprintf(fp," %d ",pixels[pixelOffset+j]);
+			}
+			fprintf(fp,"\n");	
+        }
+        fclose(fp1);
+        //Si tengo un chorizo de datos, pues buscar un patr√≥n que describa la convoluci√≥n, cada posici√≥n se va a desplazar
+        //la misma cantidad de bytes para buscar los elementos de la convoluci√≥n
         
         /*
         int index=height;
@@ -260,11 +303,49 @@ void WriteImage(const char *fileName, byte *pixels, int32 width, int32 height,in
  
 int main()
 {
-        byte *pixels;
+        byte *pixels,*pixels1;
         int32 width;
         int32 height;
         int32 bytesPerPixel;
-        ReadImage("img1.bmp", &pixels, &width, &height,&bytesPerPixel);
+        
+        int i=0,j=0;
+        int kernel[3][3]= { { -1, -1, -1 }, { -1, 8, -1 }, {-1,-1,-1} };
+		ReadImage("lena_gray.bmp", &pixels, &width, &height,&bytesPerPixel);
+		int unpaddedRowSize = (width)*(bytesPerPixel); 
+		pixels1 = (byte*)malloc((unpaddedRowSize*height));
+		for (i=0; i<height; i++){
+        	for (j=0; j<unpaddedRowSize ; j++){
+        		if(i==0 || i==height-1 || j==0 || j==unpaddedRowSize-1){
+        			pixels1[(unpaddedRowSize*i)+j ]=0;
+				}
+				else{
+				pixels1[(unpaddedRowSize*i)+j]= (pixels[((unpaddedRowSize*i)+j) - (unpaddedRowSize+1)]*kernel[0][0]) + (pixels[((unpaddedRowSize*i)+j) - (unpaddedRowSize)]*kernel[0][1]) 
+				+ (pixels[((unpaddedRowSize*i)+j) - (unpaddedRowSize-1)]*kernel[0][2]) 
+				+ (pixels[((unpaddedRowSize*i)+j) - 1]*kernel[1][0]) + (pixels[(unpaddedRowSize*i)+j]*kernel[1][1]) 
+				+ (pixels[((unpaddedRowSize*i)+j) + 1]*kernel[1][2]) + (pixels[((unpaddedRowSize*i)+j) + (unpaddedRowSize-1)]*kernel[2][0]) + 
+				(pixels[((unpaddedRowSize*i)+j) + unpaddedRowSize]*kernel[2][1]) + (pixels[((unpaddedRowSize*i)+j) + (unpaddedRowSize+1)]*kernel[2][2]);
+				if(pixels1[(unpaddedRowSize*i)+j]<0 || pixels1[(unpaddedRowSize*i)+j]>255){
+					pixels1[(unpaddedRowSize*i)+j]=0;
+				}
+				}
+			}
+		}
+		
+		/*FILE *fp;
+        fp = fopen("archivo.txt", "w+");
+        for ( i = 0; i < height ; i++)
+        {
+            int pixelOffset=((height-i)-1)*unpaddedRowSize;
+			fprintf(fp,"%d",pixels1[pixelOffset]);
+            for (j=1;j<(width*bytesPerPixel);j++){
+            	fprintf(fp," %d ",pixels1[pixelOffset+j]);
+			}
+			fprintf(fp,"\n");	
+        }
+        fclose(fp);
+		*/
+		
+		printf("%d",bytesPerPixel);
         WriteImage("img2.bmp", pixels, width, height, bytesPerPixel);
         free(pixels);
         return 0;
