@@ -8,3 +8,5 @@ Cambios:
 Pendiente:
 -Al definir un kernel y aplicar la convolución sobre los bytes recorridos genera una imagen dañada.
 -Paralelizar
+
+Importante: lena.bmp tiene 1 byte por pixel. Por otro lado img1.bmp tiene 3 bytes por pixel.
